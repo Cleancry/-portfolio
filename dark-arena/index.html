@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>忏悔之刃 — 教堂圣战</title>
+<link rel="stylesheet" href="css/style.css?v=20240814ab">
+</head>
+<body>
+<div id="boot">
+  <div class="boot-inner">
+    <h1 class="boot-title">忏悔之刃</h1>
+    <p class="boot-sub">灰 烬 与 白 骨 之 地</p>
+    <div class="boot-bar"><div class="boot-fill" id="bootFill"></div></div>
+    <p class="boot-tip" id="bootTip">正在召魂……</p>
+    <p class="boot-key">WASD / 方向键 — 移动&nbsp;&nbsp;·&nbsp;&nbsp;J — 攻击&nbsp;&nbsp;·&nbsp;&nbsp;K — 重击&nbsp;&nbsp;·&nbsp;&nbsp;L — 处决（怒气满）&nbsp;&nbsp;·&nbsp;&nbsp;Shift — 闪避&nbsp;&nbsp;·&nbsp;&nbsp;S — 格挡</p>
+  </div>
+</div>
+<canvas id="game"></canvas>
+<div id="hud" class="hidden">
+  <div class="hud-bar hp"><div class="hud-fill" id="hpFill"></div><span class="hud-label">生命</span></div>
+  <div class="hud-bar fury"><div class="hud-fill" id="furyFill"></div><span class="hud-label">怒气</span><span class="fury-key" id="furyKey">L</span></div>
+  <div class="hud-wave" id="hudWave">第 I 波</div>
+  <div class="hud-kills" id="hudKills">击杀 0</div>
+</div>
+<div id="overlay"></div>
+<div id="decorConsole" class="hidden">
+  <div class="dc-head">场景装饰控制台<span class="dc-hint">F2 开关 · 改动自动保存</span></div>
+  <div class="dc-grid" id="dcGrid"></div>
+</div>
+<script src="js/engine/util.js?v=20240814ab"></script>
+<script src="js/engine/input.js?v=20240814ab"></script>
+<script src="js/engine/audio.js?v=20240814ab"></script>
+<script src="js/engine/pixelart.js?v=20240814ab"></script>
+<script src="js/engine/anim.js?v=20240814ab"></script>
+<script src="js/engine/fx.js?v=20240814ab"></script>
+<script src="js/engine/camera.js?v=20240814ab"></script>
+<script src="js/engine/world.js?v=20240814ab"></script>
+<script src="js/game/entity.js?v=20240814ab"></script>
+<script src="js/game/player.js?v=20240814ab"></script>
+<script src="js/game/enemy.js?v=20240814ab"></script>
+<script src="js/game/boss.js?v=20240814ab"></script>
+<script src="js/game/waves.js?v=20240814ab"></script>
+<script src="js/game/ui.js?v=20240814ab"></script>
+<script src="js/game/decor.js?v=20240814ab"></script>
+<script src="js/main.js?v=20240814ab"></script>
+</body>
+</html>

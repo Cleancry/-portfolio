@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX ROYALE — 边境风暴 · 大逃杀射击</title>
+<link rel="stylesheet" href="css/style.css?v=400">
+</head>
+<body>
+<div id="game-root">
+  <canvas id="game-canvas"></canvas>
+
+  <!-- ======= 主菜单 ======= -->
+  <div id="menu" class="screen active">
+    <div class="menu-bg"></div>
+    <div class="menu-content">
+      <h1 class="logo">APEX<span>ROYALE</span></h1>
+      <p class="tagline">边境风暴 · 大逃杀射击</p>
+      <div class="menu-card">
+        <div class="menu-row">
+          <label>传奇选择</label>
+          <div id="legend-select" class="legend-select"></div>
+        </div>
+        <div class="menu-row">
+          <label>游戏规模</label>
+          <div class="btn-group">
+            <button class="btn btn-sm size-btn active" data-size="30">30 人</button>
+            <button class="btn btn-sm size-btn" data-size="44">44 人</button>
+            <button class="btn btn-sm size-btn" data-size="58">58 人</button>
+          </div>
+        </div>
+        <button id="btn-start" class="btn btn-primary">开始匹配</button>
+        <p class="menu-hint">支持键鼠 · 请点击后允许鼠标锁定<br>建议使用 Chrome / Edge</p>
+      </div>
+    </div>
+    <div class="menu-footer">v4.0 · 素材来源见 README · CC0 授权</div>
+  </div>
+
+  <!-- ======= 跳伞阶段 ======= -->
+  <div id="drop-screen" class="screen">
+    <div class="drop-ui">
+      <div class="drop-title">跳伞指挥官</div>
+      <div id="drop-hint" class="drop-hint">按 <b>[F]</b> 跳伞</div>
+      <div id="drop-alt" class="drop-alt">高度 300m</div>
+      <div id="drop-speed" class="drop-speed">速度 0</div>
+    </div>
+  </div>
+
+  <!-- ======= HUD ======= -->
+  <div id="hud" class="hidden">
+    <div id="crosshair" class="crosshair">
+      <div class="ch-dot"></div>
+      <div class="ch-line ch-t"></div><div class="ch-line ch-b"></div>
+      <div class="ch-line ch-l"></div><div class="ch-line ch-r"></div>
+      <div id="ch-hit" class="ch-hit hidden">✕</div>
+    </div>
+    <div id="hitmark" class="hitmark hidden">✕</div>
+
+    <div id="damage-vignette"></div>
+    <div id="kill-feed" class="kill-feed"></div>
+    <div id="announce" class="announce hidden"></div>
+    <div id="center-msg" class="center-msg hidden"></div>
+
+    <!-- 顶部：存活/击杀 -->
+    <div class="top-bar">
+      <div class="squad">
+        <div class="squad-item me">
+          <span class="squad-bar" id="squad-hp"></span>
+          <span class="squad-name" id="squad-name">YOU</span>
+        </div>
+      </div>
+      <div class="match-info">
+        <span id="alive-count">30</span> 存活
+        <span class="sep">|</span>
+        <span id="kill-count">0</span> 击杀
+        <span class="sep">|</span>
+        <span id="rank-info">#30</span>
+      </div>
+      <div id="minimap-wrap"><canvas id="minimap" width="180" height="180"></canvas></div>
+    </div>
+
+    <!-- 底部：血甲 / 武器 -->
+    <div class="bottom-bar">
+      <div class="health-block">
+        <div class="stat-label">生命</div>
+        <div class="bar hp"><div id="hp-fill" class="fill"></div></div>
+        <div id="hp-text" class="stat-text">100</div>
+        <div class="stat-label">护甲</div>
+        <div class="bar shield"><div id="shield-fill" class="fill"></div></div>
+        <div id="shield-text" class="stat-text">0</div>
+      </div>
+      <div class="weapon-block">
+        <div id="wpn-name" class="wpn-name">无武器</div>
+        <div id="wpn-attach" class="wpn-attach">—</div>
+        <div id="ammo-text" class="ammo-text"><span id="ammo-mag">0</span> / <span id="ammo-res">0</span></div>
+        <div id="ammo-type" class="ammo-type">—</div>
+        <div class="wpn-slot" id="wpn-slot-1">1</div>
+        <div class="wpn-slot" id="wpn-slot-2">2</div>
+      </div>
+      <div class="legend-block">
+        <div id="legend-icon" class="legend-icon">⚡</div>
+        <div class="legend-name" id="legend-name">掠影</div>
+        <div id="skill-bar" class="bar skill"><div id="skill-fill" class="fill"></div></div>
+        <div class="skill-key" id="skill-key">[Q]</div>
+      </div>
+    </div>
+
+    <div id="zone-bar-wrap">
+      <div class="zone-label" id="zone-label">安全区</div>
+      <div id="zone-bar" class="bar zone"><div id="zone-fill" class="fill"></div></div>
+      <div id="zone-time" class="zone-time">--</div>
+    </div>
+
+    <div id="loot-hint" class="loot-hint hidden"></div>
+    <div id="weapon-compare" class="weapon-compare hidden"></div>
+  </div>
+
+  <!-- ======= 结算 ======= -->
+  <div id="end-screen" class="screen">
+    <div class="end-card">
+      <div id="end-title" class="end-title">冠军</div>
+      <div class="end-sub" id="end-sub">你成为了 Apex 冠军！</div>
+      <div class="end-stats">
+        <div class="stat"><span id="end-kills">0</span><label>击杀</label></div>
+        <div class="stat"><span id="end-dmg">0</span><label>伤害</label></div>
+        <div class="stat"><span id="end-rank">#1</span><label>排名</label></div>
+        <div class="stat"><span id="end-time">0:00</span><label>时长</label></div>
+      </div>
+      <button id="btn-replay" class="btn btn-primary">再来一局</button>
+      <button id="btn-menu" class="btn">返回主菜单</button>
+    </div>
+  </div>
+
+  <div id="pause-overlay" class="hidden">
+    <div class="pause-card">
+      <h2>已暂停</h2>
+      <button id="btn-resume" class="btn btn-primary">继续</button>
+      <button id="btn-quit" class="btn">退出对局</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/vendor/three.min.js?v=400"></script>
+<script src="js/vendor/GLTFLoader.js?v=400"></script>
+<script src="js/engine/util.js?v=400"></script>
+<script src="js/engine/audio.js?v=400"></script>
+<script src="js/engine/input.js?v=400"></script>
+<script src="js/engine/world.js?v=400"></script>
+<script src="js/engine/fx.js?v=400"></script>
+<script src="js/engine/weapons.js?v=400"></script>
+<script src="js/engine/loot.js?v=400"></script>
+<script src="js/engine/models.js?v=400"></script>
+<script src="js/game/player.js?v=400"></script>
+<script src="js/game/enemy.js?v=400"></script>
+<script src="js/game/br.js?v=400"></script>
+<script src="js/game/hud.js?v=400"></script>
+<script src="js/main.js?v=400"></script>
+</body>
+</html>

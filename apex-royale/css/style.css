@@ -1,0 +1,196 @@
+/* ============ APEX ROYALE — HUD & UI ============ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #0b0d10; }
+body { font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; color: #e8e8e8; user-select: none; -webkit-user-select: none; }
+#game-root { position: fixed; inset: 0; }
+#game-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hidden { display: none !important; }
+
+/* ============ 通用按钮 ============ */
+.btn {
+  display: inline-block; padding: 10px 26px; margin: 6px;
+  background: linear-gradient(180deg, #2a2f38, #1b1f26);
+  border: 1px solid #3c4450; color: #cfd6df; font-size: 15px;
+  border-radius: 3px; cursor: pointer; letter-spacing: 1px;
+  transition: all .15s ease;
+}
+.btn:hover { border-color: #e88a2a; color: #fff; background: linear-gradient(180deg, #383d47, #262b33); }
+.btn:active { transform: scale(.97); }
+.btn-primary {
+  background: linear-gradient(180deg, #e88a2a, #c96f14); color: #1c1408; font-weight: 700;
+  border: 1px solid #ffb05c;
+}
+.btn-primary:hover { background: linear-gradient(180deg, #ff9d3c, #e07d1c); border-color: #ffc986; color: #1c1408; }
+.btn-sm { padding: 6px 14px; font-size: 13px; }
+
+/* ============ 全屏层 ============ */
+.screen { position: absolute; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; }
+.screen.active { display: flex; }
+
+/* ============ 主菜单 ============ */
+#menu { background: radial-gradient(ellipse at 30% 20%, #1d2430 0%, #0b0d10 65%); }
+.menu-bg { position: absolute; inset: 0; background:
+  radial-gradient(2px 2px at 20% 30%, #e88a2a66 50%, transparent 51%),
+  radial-gradient(1.5px 1.5px at 70% 60%, #4fc3f766 50%, transparent 51%),
+  radial-gradient(2px 2px at 85% 25%, #e88a2a44 50%, transparent 51%);
+  opacity: .5; }
+.menu-content { position: relative; text-align: center; z-index: 2; }
+.logo {
+  font-size: 84px; font-weight: 900; letter-spacing: 6px; color: #fff;
+  text-shadow: 0 0 30px #e88a2a88, 0 4px 0 #000;
+}
+.logo span { color: #e88a2a; }
+.tagline { color: #9aa4b0; letter-spacing: 8px; font-size: 14px; margin: 6px 0 34px; text-transform: uppercase; }
+.menu-card {
+  display: inline-block; min-width: 460px; padding: 26px 30px;
+  background: linear-gradient(180deg, #161a21f2, #0e1116f2);
+  border: 1px solid #2c333d; border-radius: 8px; text-align: left;
+}
+.menu-row { margin-bottom: 16px; }
+.menu-row label { display: block; font-size: 12px; color: #8a93a0; letter-spacing: 2px; margin-bottom: 8px; text-transform: uppercase; }
+.legend-select { display: flex; gap: 10px; }
+.legend-card {
+  flex: 1; padding: 12px 8px; text-align: center; cursor: pointer;
+  border: 1px solid #2c333d; border-radius: 6px; background: #12161c;
+  transition: all .15s;
+}
+.legend-card:hover { border-color: #4a5563; }
+.legend-card.selected { border-color: #e88a2a; background: #1a150c; box-shadow: 0 0 14px #e88a2a44; }
+.legend-card .lc-icon { font-size: 30px; }
+.legend-card .lc-name { font-size: 13px; font-weight: 700; margin-top: 6px; color: #e8e8e8; }
+.legend-card .lc-passive { font-size: 10px; color: #8a93a0; margin-top: 3px; }
+.btn-group { display: flex; gap: 8px; }
+.btn-group .btn { margin: 0; flex: 1; }
+.size-btn.active { border-color: #e88a2a; color: #ffb05c; }
+#btn-start { width: 100%; margin: 8px 0 0; padding: 13px; font-size: 17px; letter-spacing: 4px; }
+.menu-hint { text-align: center; font-size: 12px; color: #6b7280; margin-top: 12px; line-height: 1.7; }
+.menu-footer { position: absolute; bottom: 18px; width: 100%; text-align: center; font-size: 11px; color: #4d5560; z-index: 2; }
+
+/* ============ 跳伞 ============ */
+#drop-screen { background: radial-gradient(ellipse at 50% 0%, #31415c 0%, #0b0d10 75%); }
+.drop-ui { position: relative; z-index: 2; text-align: center; }
+.drop-title { font-size: 22px; font-weight: 800; letter-spacing: 10px; color: #fff; text-shadow: 0 2px 10px #000; }
+.drop-hint { margin-top: 18px; font-size: 15px; color: #cfd6df; }
+.drop-hint b { color: #ffb05c; }
+.drop-alt, .drop-speed { margin-top: 8px; font-size: 13px; color: #9aa4b0; font-variant-numeric: tabular-nums; }
+
+/* ============ HUD ============ */
+#hud { position: absolute; inset: 0; z-index: 30; pointer-events: none; }
+
+/* 准星 */
+.crosshair { position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: 5; }
+.ch-dot { position: absolute; left: -1px; top: -1px; width: 2px; height: 2px; background: #fff; border-radius: 50%; }
+.ch-line { position: absolute; background: #fff; box-shadow: 0 0 2px #000; transition: all .08s; }
+.ch-t { left: -1px; top: -9px; width: 2px; height: 7px; }
+.ch-b { left: -1px; top: 2px; width: 2px; height: 7px; }
+.ch-l { left: -9px; top: -1px; width: 7px; height: 2px; }
+.ch-r { left: 2px; top: -1px; width: 7px; height: 2px; }
+.ch-hit { position: absolute; left: -9px; top: -9px; width: 18px; height: 18px; color: #ff5533; font-size: 16px; text-align: center; line-height: 18px; text-shadow: 0 0 6px #ff5533; animation: chpop .2s ease; }
+@keyframes chpop { 0% { transform: scale(1.6); opacity: 1; } 100% { transform: scale(1); opacity: 0; } }
+.hitmark { position: absolute; left: 50%; top: 50%; margin: -14px; width: 28px; height: 28px; z-index: 6; color: #ffd75e; font-size: 22px; text-align: center; line-height: 28px; text-shadow: 0 0 8px #ffd75e; animation: chpop .18s ease; }
+
+/* 受击红晕 */
+#damage-vignette { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse at center, transparent 40%, #a01c1c 100%); transition: opacity .12s; z-index: 4; }
+
+/* 击杀播报 */
+.kill-feed { position: absolute; top: 90px; right: 20px; display: flex; flex-direction: column; gap: 4px; z-index: 8; }
+.kf-item { background: #000000aa; border-left: 3px solid #e88a2a; padding: 4px 10px; font-size: 12px; color: #dfe5ec; animation: kfin .15s ease, kfout .4s ease 4s forwards; white-space: nowrap; }
+.kf-item .kf-killer { color: #fff; font-weight: 700; }
+.kf-item .kf-killed { color: #ff8a7a; font-weight: 700; }
+.kf-item .kf-weapon { color: #8a93a0; }
+@keyframes kfin { from { transform: translateX(30px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes kfout { to { opacity: 0; transform: translateX(20px); } }
+
+/* 中央通告 */
+.announce { position: absolute; top: 22%; left: 50%; transform: translateX(-50%); font-size: 30px; font-weight: 800; letter-spacing: 4px; color: #ffb05c; text-shadow: 0 2px 14px #000, 0 0 30px #e88a2a66; z-index: 9; text-align: center; }
+.center-msg { position: absolute; top: 40%; left: 50%; transform: translateX(-50%); font-size: 16px; color: #fff; text-shadow: 0 2px 8px #000; z-index: 9; text-align: center; letter-spacing: 1px; }
+
+/* 顶栏 */
+.top-bar { position: absolute; top: 14px; left: 14px; right: 14px; display: flex; align-items: flex-start; justify-content: space-between; z-index: 7; }
+.squad { display: flex; flex-direction: column; gap: 3px; }
+.squad-item { display: flex; align-items: center; gap: 6px; background: #00000088; padding: 3px 8px; border-radius: 3px; }
+.squad-bar { width: 60px; height: 5px; background: #ffffff33; border-radius: 2px; position: relative; overflow: hidden; }
+.squad-bar::after { content: ''; position: absolute; inset: 0; background: #6bd968; transform-origin: left; }
+#squad-hp::after { transform: scaleX(1); }
+.squad-name { font-size: 10px; color: #cfd6df; letter-spacing: 1px; }
+.match-info { background: #00000088; padding: 5px 12px; border-radius: 3px; font-size: 13px; color: #dfe5ec; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
+.match-info .sep { color: #4d5560; margin: 0 6px; }
+
+/* 小地图 */
+#minimap-wrap { width: 180px; height: 180px; border: 1px solid #3c4450; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 12px #00000088; background: #10141a; }
+#minimap { display: block; }
+
+/* 底栏 */
+.bottom-bar { position: absolute; bottom: 16px; left: 16px; right: 16px; display: flex; align-items: flex-end; justify-content: space-between; z-index: 7; }
+.health-block { background: #00000099; border-radius: 6px; padding: 10px 14px; width: 240px; border: 1px solid #2c333d66; }
+.stat-label { font-size: 9px; color: #8a93a0; letter-spacing: 2px; text-transform: uppercase; }
+.bar { height: 8px; background: #ffffff1a; border-radius: 3px; overflow: hidden; margin: 3px 0 6px; position: relative; }
+.bar .fill { position: absolute; inset: 0; transform-origin: left; transition: transform .12s ease-out; }
+.bar.hp .fill { background: linear-gradient(90deg, #e04a2f, #ff6b4a); }
+.bar.shield .fill { background: linear-gradient(90deg, #1f7fd6, #4fc3f7); }
+.bar.skill .fill { background: linear-gradient(90deg, #e88a2a, #ffd75e); }
+.bar.zone .fill { background: linear-gradient(90deg, #3aa0e0, #8ae0ff); }
+.stat-text { float: right; font-size: 12px; color: #fff; margin-top: -22px; font-variant-numeric: tabular-nums; }
+
+.weapon-block { background: #00000099; border-radius: 6px; padding: 10px 16px; text-align: center; min-width: 240px; border: 1px solid #2c333d66; position: relative; }
+.wpn-name { font-size: 16px; font-weight: 700; color: #fff; letter-spacing: 1px; }
+.wpn-attach { font-size: 10px; color: #ffd75e; margin-top: 2px; min-height: 13px; }
+.ammo-text { font-size: 24px; font-weight: 800; color: #fff; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.ammo-text.low { color: #ff8a5a; }
+.ammo-type { font-size: 10px; color: #8a93a0; letter-spacing: 2px; }
+.wpn-slot { position: absolute; bottom: 6px; width: 18px; height: 18px; border: 1px solid #4d5560; border-radius: 3px; font-size: 10px; line-height: 16px; color: #8a93a0; }
+#wpn-slot-1 { left: 6px; } #wpn-slot-2 { right: 6px; }
+.wpn-slot.used { border-color: #e88a2a; color: #ffb05c; }
+
+.legend-block { background: #00000099; border-radius: 6px; padding: 10px 14px; width: 210px; border: 1px solid #2c333d66; }
+.legend-icon { font-size: 26px; float: left; margin-right: 10px; }
+.legend-name { font-size: 14px; font-weight: 700; color: #fff; }
+.skill-key { font-size: 10px; color: #ffd75e; margin-top: 2px; letter-spacing: 1px; }
+
+/* 安全区进度 */
+#zone-bar-wrap { position: absolute; bottom: 132px; left: 50%; transform: translateX(-50%); width: 300px; z-index: 7; background: #00000088; border-radius: 4px; padding: 6px 12px; text-align: center; }
+.zone-label { font-size: 10px; color: #8ae0ff; letter-spacing: 2px; }
+.zone-time { position: absolute; right: 12px; top: 6px; font-size: 11px; color: #dfe5ec; font-variant-numeric: tabular-nums; }
+
+/* 拾取提示 */
+.loot-hint { position: absolute; bottom: 30%; left: 50%; transform: translateX(-50%); background: #000000bb; border: 1px solid #e88a2a; color: #ffd75e; padding: 8px 18px; border-radius: 4px; font-size: 14px; z-index: 8; text-align: center; }
+.weapon-compare { position: absolute; bottom: 33%; left: 50%; transform: translateX(-50%); background: #000000cc; border: 1px solid #3c4450; padding: 10px 16px; border-radius: 6px; font-size: 12px; color: #cfd6df; z-index: 8; line-height: 1.6; }
+.weapon-compare b { color: #ffd75e; }
+
+/* ============ 结算 ============ */
+#end-screen { background: radial-gradient(ellipse at 50% 30%, #231a0e 0%, #0b0d10 70%); }
+.end-card { text-align: center; background: #12161cf2; border: 1px solid #e88a2a66; border-radius: 10px; padding: 40px 60px; box-shadow: 0 0 60px #e88a2a22; }
+.end-title { font-size: 60px; font-weight: 900; letter-spacing: 8px; color: #ffb05c; text-shadow: 0 0 30px #e88a2a88; }
+.end-sub { color: #9aa4b0; margin: 8px 0 26px; letter-spacing: 2px; }
+.end-stats { display: flex; gap: 34px; justify-content: center; margin-bottom: 26px; }
+.end-stats .stat { text-align: center; }
+.end-stats .stat span { display: block; font-size: 30px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; }
+.end-stats .stat label { font-size: 11px; color: #8a93a0; letter-spacing: 2px; text-transform: uppercase; }
+
+/* ============ 暂停 ============ */
+#pause-overlay { position: absolute; inset: 0; z-index: 60; background: #00000099; display: flex; align-items: center; justify-content: center; }
+.pause-card { text-align: center; }
+.pause-card h2 { margin-bottom: 20px; letter-spacing: 6px; }
+
+/* ============ 状态提示 ============ */
+.toast { position: absolute; top: 30%; left: 50%; transform: translateX(-50%); background: #000000aa; border: 1px solid #e88a2a88; color: #ffd75e; padding: 8px 20px; border-radius: 4px; font-size: 13px; z-index: 12; letter-spacing: 1px; animation: toastin .25s ease, toastout .4s ease 2.4s forwards; pointer-events: none; }
+@keyframes toastin { from { opacity: 0; transform: translateX(-50%) translateY(-10px); } }
+@keyframes toastout { to { opacity: 0; } }
+
+/* 伤害数字（3D 世界，由 JS 注入 DOM） */
+.dmg-num { position: absolute; z-index: 20; font-weight: 800; font-size: 17px; text-shadow: 0 1px 3px #000, 0 0 8px #ff553366; pointer-events: none; animation: dmgfloat .8s ease-out forwards; font-variant-numeric: tabular-nums; }
+.dmg-num.crit { color: #ffd75e; font-size: 22px; }
+.dmg-num.normal { color: #ff8a5a; }
+.dmg-num.head { color: #ff5533; font-size: 24px; }
+@keyframes dmgfloat { from { opacity: 1; transform: translate(-50%, 0); } to { opacity: 0; transform: translate(-50%, -46px); } }
+
+/* 提示字条（顶部横幅：缩圈提醒等） */
+.zone-note {
+  position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
+  font-size: 19px; font-weight: 700; color: #1a1408;
+  background: linear-gradient(90deg, #ffd75e, #ffb84d);
+  padding: 7px 22px; border-radius: 5px; z-index: 90; letter-spacing: 2px;
+  box-shadow: 0 2px 14px #000000aa; border: 1px solid #ffdf8a;
+  animation: toastin .3s ease, toastout .5s ease 2.6s forwards; pointer-events: none;
+  white-space: nowrap;
+}

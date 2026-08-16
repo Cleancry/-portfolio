@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loading - TSK Portfolio</title>
+<link href="css/style.css" rel="stylesheet" type="text/css">
+<link rel="preload" href="assets/fonts/6940a0abd735a1e3a640d079_KTFMetro-Blueline.otf" as="font" type="font/otf" crossorigin>
+<style>
+  /* standalone loading page: force preloader visible, no transitions */
+  html, body { background: #2c2824; }
+  body { margin: 0; }
+  .transition, .noise, .master-preloader, .header, .hero, [data-barba] { display: none !important; }
+  .preloader { display: block !important; z-index: 10; }
+  .preloader .preloader_c { display: flex; }
+  
+</style>
+</head>
+<body class="body theme_on-dark">
+<div data-preloader="" class="preloader theme_on-dark"><div preloader="c" class="preloader_c"><div class="preloader_c_c"><div class="preloader_top"><div class="unit-136"></div><div class="grid"><div id="w-node-d98746c6-f24a-7335-0b70-a4261484e4c9-1484e4c4" class="preloader_top_desc"><div data-preloader="ctn" class="logo-diagram text-dark w-embed"><img src="assets/img/logo-tsk-gold.png" alt="logo" style="width:100%;height:100%;object-fit:contain;display:block"></div><div class="unit-32"></div><p data-preloader="p" class="p6 text-dark">I design quietly<br>&nbsp;/ and let the shapes speak</p></div></div></div><div class="preloader_bot"><div class="grid"><div id="w-node-d98746c6-f24a-7335-0b70-a4261484e4d3-1484e4c4" class="preloader_desc-r"><div data-preloader="p" class="p6 text-dark a-right">正在狂奔猛冲疾跑到您的屏幕...&nbsp;<br>Please wait</div></div><div id="w-node-d98746c6-f24a-7335-0b70-a4261484e4d8-1484e4c4" class="preloader_desc-l"><div data-preloader="p" class="p6 text-dark">Tang Shunkai<br>personal — portfolio</div></div></div><div class="unit-8"></div><div class="hero-s_content_logo"><div class="logo-w"></div></div><div class="unit-8"></div></div></div><div data-preloader="bg" class="preloader_bg"><div class="preloader_bg_c"><div data-preloader="scene" class="preloader_bg_scene"><video preload="auto" webkit-playsinline="" playsinline="" muted="" autoplay="" loop="" poster="assets/img/69f28364671bf58d2d6aed7a_preloader_sheep-1.avif" fetchpriority="high" class="video"><source src="assets/video/preloader_sheep.mp4" type="video/mp4"></video><div class="preloader_bg_scene_label b-mob"><div data-preloader-percent="" data-preloader="p" class="p6 text-dark a-center">100%</div><div data-preloader="p" class="p6 text-dark a-center">loaded</div></div></div></div></div></div><div class="preloader_logo"><div class="hero-s_content_logo"><div class="logo-w"><div data-preloader="logo" class="logo-w theme_on-dark"><div class="logo w-embed"><img src="assets/img/portfolio-raster.png" alt="portfolio" style="width:100%;height:100%;object-fit:contain;display:block"></div></div></div></div><div class="unit-8"></div></div></div>
+
+<script>
+(function () {
+  var p = document.querySelector('[data-preloader-percent]');
+  if (p) {
+    var n = 0;
+    var t = setInterval(function () {
+      n = Math.min(100, n + 1);
+      p.textContent = n + '%';
+      if (n >= 100) { clearInterval(t); }
+    }, 35);
+  }
+})();
+</script>
+
+<script src="js/gsap.min.js"></script>
+<script>
+(function () {
+  if (typeof gsap === 'undefined') { return; }
+  var TOP    = '[data-preloader="ctn"]';
+  var INTRO  = '.preloader_top_desc [data-preloader="p"]';
+  var SCENE  = '.preloader_bg_scene';
+  var PCT    = '[data-preloader-percent]';
+  var BOTL   = '.preloader_desc-l';
+  var BOTR   = '.preloader_desc-r';
+  var LOGO   = '[data-preloader="logo"]';
+  var els = [TOP, INTRO, SCENE, PCT, BOTL, BOTR, LOGO];
+  gsap.set([TOP, INTRO, PCT, BOTL, BOTR, LOGO], { opacity: 0, yPercent: 40 });
+  gsap.set(SCENE, { opacity: 0 });
+  var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  tl.to(TOP,   { opacity: 1, yPercent: 0, duration: 1.5 }, 0)
+    .to(INTRO, { opacity: 1, yPercent: 0, duration: 1.5 }, 0)
+    .to(SCENE, { opacity: 1, duration: 1.5 }, 0)
+    .to(PCT,   { opacity: 1, yPercent: 0, duration: 1.5 }, 0)
+    .to(BOTL,  { opacity: 1, yPercent: 0, duration: 1.5 }, 0)
+    .to(BOTR,  { opacity: 1, yPercent: 0, duration: 1.5 }, 0)
+    .to(LOGO,  { opacity: 1, yPercent: 0, duration: 1.5 }, 0);
+})();
+</script>
+
+
+</body></html>
